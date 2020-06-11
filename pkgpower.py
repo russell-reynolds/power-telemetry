@@ -44,7 +44,7 @@ def _read_sysfs(filename):
     return value
 
 def _get_max_power_consumption(cpu):
-    print("_get_max_power_consumption:" + cpu)
+    print("_get_max_power_consumption:")
     """ Get the max power consumption of CPU """
     powercap_cpu_base = os.path.join(
         BASE_POWERCAP_PATH, "intel-rapl:{}".format(cpu.node_id))
@@ -62,7 +62,7 @@ def _get_max_power_consumption(cpu):
     cpu.power_cons_max = cons_max
 
 def _get_tdp_power(cpu):
-    print("_get_tdp_power:" + cpu)
+    print("_get_tdp_power:")
     """ Get the TDP limit of package"""
     powercap_cpu_base = os.path.join(
         BASE_POWERCAP_PATH, "intel-rapl:{}".format(cpu.node_id))
@@ -80,7 +80,7 @@ def _get_tdp_power(cpu):
     cpu.tdp = tdp
 
 def _get_pkg_name(cpu):
-    print("_get_pkg_name:" + cpu)
+    print("_get_pkg_name:")
     """ Get the package name """
     powercap_cpu_base = os.path.join(
         BASE_POWERCAP_PATH, "intel-rapl:{}".format(cpu.node_id))
@@ -93,7 +93,7 @@ def _get_pkg_name(cpu):
     cpu.name = raw_cpu_name.replace("-", "_")
 
 def _get_power_consumption_sysfs(cpu):
-    print("_get_power_consumption_sysfs:" + cpu)
+    print("_get_power_consumption_sysfs:")
     powercap_cpu_base = os.path.join(
         BASE_POWERCAP_PATH, "intel-rapl:{}".format(cpu.node_id))
     path = os.path.join(powercap_cpu_base, "energy_uj")
@@ -101,7 +101,7 @@ def _get_power_consumption_sysfs(cpu):
     return cons
 
 def _get_node_id(nodepath):
-    print("_get_node_id:" + nodepath)
+    print("_get_node_id:")
     reg_ex = re.compile(r"node(?P<node>\d+)")
     # function to extract node ID from full node path
     # get basename, e.g. "node0"
@@ -130,7 +130,7 @@ def config_func(_unused_config):
         __CPUS += [cpu]
 
 def _read_pkg_power(cpu):
-    print("_read_pkg_power:" + cpu)
+    print("_read_pkg_power:")
     # first, read current power consumption value and timestamp
     cur_ts = time.monotonic()
     cur_cons = _get_power_consumption_sysfs(cpu)
@@ -186,9 +186,9 @@ def read_func():
         val.plugin = cpu.name + '_power'
         val.dispatch(values=[pkg_power])
         #Dispatch TDP value
-        val = collectd.Values(type='power')
-        val.plugin = cpu.name + '_TDP_power'
-        val.dispatch(values=[cpu.tdp])
+        #val = collectd.Values(type='power')
+        #val.plugin = cpu.name + '_TDP_power'
+        #val.dispatch(values=[cpu.tdp])
 
 collectd.register_config(config_func)
 collectd.register_read(read_func)
